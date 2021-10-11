@@ -67,16 +67,20 @@ def profile_data(request):
 @csrf_exempt
 def profile_update(request,pk):
     if request.method == "POST":
-        username = request.POST['username']
-        past = request.POST['past']
-        address = request.POST['address']
-        phone = request.POST['phone']
-        print(username,past,address,phone)
-        print(pk)
+        name = request.POST['username']
+        past_address = request.POST['past']
+        current_address = request.POST['address']
+        phone_number = request.POST['phone']
+        "updating profile user data"
+        ProfileData.objects.filter(pk=pk).update(name=name, past_address=past_address,
+                                                 present_address=current_address, phone_number=phone_number)
+
+        return HttpResponseRedirect(reverse("profile_data"))
+
     else:
+        "filter the data based on user selected value"
         data = ProfileData.objects.get(pk=pk)
-        print(data.name)
-        return render(request, "crudapp/profile_update.html",{"data":data})
+        return render(request, "crudapp/profile_update.html", {"data":data})
 
 
 @csrf_exempt
